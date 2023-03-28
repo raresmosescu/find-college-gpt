@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+  <title>OpenAI Quickstart</title>
+  <link
+    rel="shortcut icon"
+    href="{{ url_for('static', filename='dog.png') }}"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+</head>
+
+<body>
+  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+  <h3>Găsește-mi facultatea</h3>
+  <form action="/" method="post">
+    <input type="text" name="interest1" placeholder="Introdu un interes" required />
+    <input type="text" name="interest2" placeholder="Introdu al doilea interes" required />
+    <input type="text" name="interest3" placeholder="Introdu al treilea interes" required />
+    <input type="submit" value="Caută" />
+  </form>
+
+  <div id="message-card" style="display: none;">
+    <p class="message-text">
+      Fiecare raspuns e unic. Generarea optiunilor va dura pana la 2 minute. Merita asteptat!
+    </p>
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
+    </div>
+    <p>Nu dați refresh și nu închideți. Rezultatele vor apărea în josul paginii în scurt timp.</p>
+  </div>
+  {% if result %}
+  <div class="result-container">
+    <div class="result">{{ result|safe }}</div>
+  </div>
+  {% endif %}
+
+  <script>
+    const form = document.querySelector('form');
+    const messageCard = document.querySelector('#message-card');
+    const loadingBar = document.querySelector('.loading-bar');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // prevent the form from submitting normally
+      messageCard.style.display = 'block';
+      simulateLoading(); // simulate a 60-second loading process
+      form.submit(); // submit the form
+    });
+    function simulateLoading() {
+      const duration = 120; // approx duration of the loading process in seconds
+      const interval = 500; // interval between each update of the loading bar in milliseconds
+      const numSteps = duration * 1000 / interval; // number of steps in the loading process
+      let step = 12; // current step in the loading process
+      const updateInterval = setInterval(() => {
+        // at a random step in the loading process, simulate a waiting period
+        if (Math.random() < 0.1) {
+          // wait 3 seconds before continuing
+            let rand = Math.random()
+            setTimeout(() => {
+              step += Math.floor(rand * 10);
+            }, rand*10000);
+        } else {
+          step += 1;
+          const progress = step / numSteps;
+          loadingBar.style.width = `${progress * 100}%`;
+          if (step >= numSteps - 15) {
+            clearInterval(updateInterval);
+          }
+        }
+
+      }, interval);
+    }
+
+  </script>
+</body>
