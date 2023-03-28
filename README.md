@@ -5,6 +5,7 @@ This is an example pet name generator app used in the OpenAI API [quickstart tut
 ## Setup
 
 1. If you don’t have Python installed, [install it from here](https://www.python.org/downloads/).
+The requiremnts.txt file is set up for Python 3.11.
 
 2. Clone this repository.
 
