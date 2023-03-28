@@ -9,7 +9,7 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 async def generate_completion(i1, i2, i3):
-    completion = await openai.ChatCompletion.create(
+    completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "user",
@@ -27,7 +27,7 @@ async def index():
         result = await generate_completion(i1, i2, i3)
         return redirect(url_for("index", result=result))
     result = request.args.get("result")
-    return await render_template("index.html", result=result)
+    return render_template("index.html", result=result)
 
 
 def generate_prompt(i1, i2, i3):
