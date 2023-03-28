@@ -50,3 +50,19 @@ def generate_prompt(i1, i2, i3):
      - {i2}
      - {i3} 
      """
+
+
+def generate_prompt(i1, i2, i3):
+    return f"""Comporta-te ca si cum ai fi expert in consultanta in cariera pentru
+    elevii de liceu. Iti voi da 3 interese pe care le am si tu trebuie sa imi recomanzi
+    la ce facultati din Romania sa aplic. Combina toate cele 3 interese intr-un singur
+    raspuns.
+    
+    Vreau maxim 50 de cuvinte si formatat in HTML, cu bullet points (ordered list),
+    daca este cazul.
+    Raspunsul trebuie sa fie strict in format HTML, sa-l putem afisa pe site.
+    Interese:
+     - {i1}
+     - {i2}
+     - {i3} 
+     """
