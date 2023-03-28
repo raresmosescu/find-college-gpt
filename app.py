@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 import openai
 from flask import Flask, redirect, render_template, request, url_for
@@ -7,21 +8,26 @@ app = Flask(__name__)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
-@app.route("/", methods=("GET", "POST"))
-def index():
-    if request.method == "POST":
-        i1,i2,i3 = request.form["interest1"], request.form["interest2"], request.form["interest3"]
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user",
-                 "content": generate_prompt(i1, i2, i3)},
-            ]
-        )
+async def generate_completion(i1, i2, i3):
+    completion = await openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user",
+             "content": generate_prompt(i1, i2, i3)},
+        ]
+    )
+    return completion.choices[0].message.content
 
-        return redirect(url_for("index", result=completion.choices[0].message.content))
+
+@app.route("/", methods=("GET", "POST"))
+async def index():
+    if request.method == "POST":
+        i1, i2, i3 = request.form["interest1"], request.form["interest2"], request.form[
+            "interest3"]
+        result = await generate_completion(i1, i2, i3)
+        return redirect(url_for("index", result=result))
     result = request.args.get("result")
-    return render_template("index.html", result=result)
+    return await render_template("index.html", result=result)
 
 
 def generate_prompt(i1, i2, i3):
@@ -35,7 +41,7 @@ def generate_prompt(i1, i2, i3):
 
     Raspunsul trebuie sa fie strict in format HTML, sa-l putem afisa pe site. 
     Nimic altceva! 
-    
+
     Acesta trebuie sa aiba borders si sa fie responsive. Fiecare coloana trebuie sa
     aiba padding de 5px.
 
